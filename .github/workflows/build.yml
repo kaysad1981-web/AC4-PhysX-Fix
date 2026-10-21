@@ -22,7 +22,12 @@ jobs:
           persist-credentials: false
       - name: Configure and build native x86 binaries
         run: |
-          cmake -S . -B build -G "Visual Studio 17 2022" -A Win32
+          $vswhere = "${env:ProgramFiles(x86)}/Microsoft Visual Studio/Installer/vswhere.exe"
+          $vsVersion = & $vswhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationVersion
+          if (-not $vsVersion) { throw 'No Visual Studio C++ installation found' }
+          $major = ([Version]$vsVersion).Major
+          $generator = if ($major -ge 18) { 'Visual Studio 18 2026' } else { 'Visual Studio 17 2022' }
+          cmake -S . -B build -G $generator -A Win32
           if ($LASTEXITCODE -ne 0) { throw 'Configure failed' }
           cmake --build build --config Release --parallel 2
           if ($LASTEXITCODE -ne 0) { throw 'Build failed' }

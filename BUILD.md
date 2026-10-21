@@ -1,6 +1,6 @@
 # Rebuild the native installer
 
-Windows, Visual Studio 2022/2026 C++ desktop tools, CMake 3.25+ and a Windows 10 SDK are required **only on the build machine**. The resulting installer does not need these tools. GitHub Actions builds on the Windows 2025 image with Visual Studio 2022.
+Windows, Visual Studio 2022/2026 C++ desktop tools, a CMake version supporting that generator and a Windows 10 SDK are required **only on the build machine**. The resulting installer does not need these tools. GitHub Actions detects the installed Visual Studio C++ version on its Windows 2025 image.
 
 The repository includes generated resource tables, the original verified 404-file payload in `distribution/payload.zip`, the settings template and the supplied background/icon. CMake extracts the payload and verifies all hashes. It downloads nlohmann/json 3.12.0 only if absent and verifies its SHA-256: `aaf127c04cb31c406e5b04a63f1ae89369fccde6d8fa7cdda1ed4f32dfc5de63`. This build-time download does not occur on a player's machine.
 
