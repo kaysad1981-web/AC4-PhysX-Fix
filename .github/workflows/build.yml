@@ -1,0 +1,92 @@
+name: Build, test and package
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2025
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Configure and build native x86 binaries
+        run: |
+          cmake -S . -B build -G "Visual Studio 17 2022" -A Win32
+          if ($LASTEXITCODE -ne 0) { throw 'Configure failed' }
+          cmake --build build --config Release --parallel 2
+          if ($LASTEXITCODE -ne 0) { throw 'Build failed' }
+      - name: Engine regression tests
+        run: |
+          ctest --test-dir build -C Release --output-on-failure
+          if ($LASTEXITCODE -ne 0) { throw 'Engine tests failed' }
+      - name: Prepare manual package and validate real payload
+        run: |
+          ./package-manual.ps1 -Destination "$PWD/dist/manual"
+          ./build/Release/engine-tests.exe --package "$PWD" "$PWD/dist/manual/GAME_FILES"
+          if ($LASTEXITCODE -ne 0) { throw 'Payload/manual integration tests failed' }
+          $p = Start-Process -FilePath "$PWD/build/Release/AC4-PhysX-Fix-Setup.exe" -ArgumentList '--verify-package' -Wait -PassThru
+          $p.Refresh()
+          if ($p.ExitCode -ne 0) { throw 'Embedded payload verification failed' }
+      - name: Package release files
+        run: |
+          Copy-Item -LiteralPath build/Release/AC4-PhysX-Fix-Setup.exe -Destination dist/AC4-PhysX-Fix-Setup.exe
+          Compress-Archive -Path dist/manual/* -DestinationPath dist/AC4-PhysX-Fix-0.3.1-Nexus-Manual.zip
+          git archive --format=zip --output=dist/AC4-PhysX-Fix-0.3.1-Installer-Source.zip HEAD
+          if ($LASTEXITCODE -ne 0) { throw 'Source archive failed' }
+          $names = @('AC4-PhysX-Fix-Setup.exe','AC4-PhysX-Fix-0.3.1-Nexus-Manual.zip','AC4-PhysX-Fix-0.3.1-Installer-Source.zip')
+          $lines = $names | ForEach-Object { '{0}  {1}' -f (Get-FileHash -LiteralPath "dist/$_" -Algorithm SHA256).Hash.ToLowerInvariant(), $_ }
+          [IO.File]::WriteAllLines("$PWD/dist/SHA256SUMS.txt", $lines, [Text.UTF8Encoding]::new($false))
+          Copy-Item -LiteralPath docs/RELEASE-NOTES.md -Destination dist/RELEASE-NOTES.md
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: native-release-files
+          path: |
+            dist/AC4-PhysX-Fix-Setup.exe
+            dist/AC4-PhysX-Fix-0.3.1-Nexus-Manual.zip
+            dist/AC4-PhysX-Fix-0.3.1-Installer-Source.zip
+            dist/SHA256SUMS.txt
+            dist/RELEASE-NOTES.md
+          if-no-files-found: error
+
+  prerelease:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[release]')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: native-release-files
+          path: dist
+      - name: Publish alpha prerelease after successful tests
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_COMMIT: ${{ github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag='v0.3.1-native'
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo 'Release already exists; preserving its original files.'
+            exit 0
+          fi
+          gh release create "$tag" --target "$RELEASE_COMMIT" --prerelease \
+            --title 'AC4 PhysX Fix 0.3.1 native — alpha' \
+            --notes-file dist/RELEASE-NOTES.md \
+            dist/AC4-PhysX-Fix-Setup.exe \
+            dist/AC4-PhysX-Fix-0.3.1-Nexus-Manual.zip \
+            dist/AC4-PhysX-Fix-0.3.1-Installer-Source.zip \
+            dist/SHA256SUMS.txt

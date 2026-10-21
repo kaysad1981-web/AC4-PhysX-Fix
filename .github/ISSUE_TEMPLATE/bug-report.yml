@@ -1,0 +1,33 @@
+name: Bug report / Ошибка
+description: Report a reproducible installation or game issue / Сообщить об ошибке
+title: "[Bug] "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened? / Что произошло?
+      description: Include steps, expected result and actual result.
+    validations:
+      required: true
+  - type: input
+    id: game
+    attributes:
+      label: Game build / Версия игры
+      placeholder: Steam build, AC4BFSP.exe SHA-256
+    validations:
+      required: true
+  - type: input
+    id: hardware
+    attributes:
+      label: Windows, CPU, GPU and driver / Система и оборудование
+    validations:
+      required: true
+  - type: textarea
+    id: choices
+    attributes:
+      label: Patch version and selected options / Версия патча и настройки
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Logs or screenshots / Журналы или снимки экрана
+      description: Remove usernames, personal paths and other private data before posting. Не публикуй личные данные.

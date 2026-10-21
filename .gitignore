@@ -1,0 +1,13 @@
+/build*/
+/dist/
+/test-artifacts/
+/ui-previews/
+/payload/
+/vendor/json.hpp
+*.user
+*.suo
+*.obj
+*.pdb
+*.ilk
+.vs/
+render-error.txt
