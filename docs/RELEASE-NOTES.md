@@ -1,19 +1,24 @@
-# AC4 PhysX Fix — 0.3.1 native (alpha)
-
-**Installer/packaging release. Game-fix DLLs remain the original 0.3 alpha payload.**
+# AC4 PhysX Fix 0.3.2 — camera fix (alpha)
 
 ## Русский
 
-Нативный установщик Windows с нашим оформлением, RU/EN, выбором компонентов, автопоиском папки, изменением установки и удалением. Проверка контрольных сумм, защита от перезаписи чужих файлов, журнал и откат при ошибках. Отдельный ZIP для ручной установки с инструкциями на двух языках.
+Бесплатное обновление: исправление зависшего крена камеры теперь включается автоматически, F4 для обычной игры не нужен. Добавлены защищённое чтение записей тел и очистка отметок групп без повторного обращения к недоступному объекту. Нативный установщик сохранил прежнее оформление RU/EN. Лимит физики трупов остаётся 20, подробные CSV-журналы по умолчанию выключены.
 
-**Только конкретный AC4BFSP.exe Steam (2023):** SHA-256 `bc11ad7924e1eca7363ee86aa3332c05386d0a05896c0b7370131daee9ab5150`.
+**Известная проблема:** редкий рывок камеры при корабельном бое/прыжке пока не исправлен. Это не полная переработка Havok. Проверенный длительный заезд частной сборки и стендовые проверки упакованного варианта описаны в docs/VALIDATION.md; полный отдельный игровой заезд варианта с автоматическим включением ещё не проведён.
 
-Сборка не подписана. Проверки установки не заменяют игровые тесты; чистые Windows VM и AMD/Intel ещё требуют проверки. EXE и ручной ZIP — альтернативы, не устанавливай их друг поверх друга. В ZIP копируется содержимое `GAME_FILES` рядом с EXE игры.
+Выберите **установщик EXE или ручной Nexus ZIP**. Для ZIP копируйте содержимое `GAME_FILES` рядом с `AC4BFSP.exe`. Не перезаписывайте чужие DLL. Для обновления с 0.3.1 предпочтителен установщик. Source.zip — исходники для разработчиков, не ручная установка.
 
 ## English
 
-Native Windows installer with RU/EN UI, component selection, game-folder discovery, modification and removal. Payload/executable checksums, foreign-file protection, transaction journal and rollback. Separate manual ZIP with bilingual instructions.
+Free update: the scoped retired CameraFX.roll fix is enabled automatically; F4 is not required in normal play. Adds guarded corpse reads and cached collision-group cleanup without rereading removed objects. Retains the native RU/EN installer design. CorpseLimit stays 20; detailed CSV diagnostics default off. Only dinput8.dll changed among the 404 payload files.
 
-**Only the exact Steam (2023) AC4BFSP.exe hash above is supported.** Unsigned alpha build. Installation tests do not replace gameplay, clean-VM or AMD/Intel validation. Choose setup or manual ZIP, not both. Copy the contents of `GAME_FILES` next to the game EXE for manual installation.
+**Known issue:** a rare camera jerk during ship combat/jumping remains unresolved. This is not a complete Havok rewrite. Local checks and the distinction between the reviewed private game build and packaged default-on variant are documented in docs/VALIDATION.md. CI checks installation/packaging, not complete gameplay or Havok lifetimes.
 
-Assets: native setup, manual Nexus ZIP, installer project source ZIP and SHA256SUMS.txt. GitHub's automatic Source code downloads are development sources, not a ready-to-install game patch.
+Choose **setup EXE or manual Nexus ZIP**. Copy the contents of `GAME_FILES` next to the game EXE for manual installation. Do not overwrite another mod's DLL. Setup is preferred for validated updates. Source.zip is developer source, not the manual game package.
+
+## Supported build / Совместимость
+
+Only Steam (2023) AC4BFSP.exe SHA256:
+`bc11ad7924e1eca7363ee86aa3332c05386d0a05896c0b7370131daee9ab5150`.
+
+Unsigned alpha. Assets include setup, manual ZIP, source ZIP and SHA256SUMS.txt. The previous 0.3.1 release remains available.

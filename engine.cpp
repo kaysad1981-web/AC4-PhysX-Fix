@@ -597,8 +597,8 @@ Result Engine::install(const Options &o) {
         }
     }
     json m = {{"product", PRODUCT},
-              {"version", "0.3.1-native"},
-              {"patchVersion", "0.3.0-alpha"},
+              {"version", "0.3.2-native"},
+              {"patchVersion", "0.3.2-alpha"},
               {"root", utf8(root.wstring())},
               {"exeSha256", ctx.supportedHash},
               {"build", "Steam (2023)"},

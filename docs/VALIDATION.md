@@ -1,30 +1,12 @@
-# Validation status
+# 0.3.2 alpha — validation and limits
 
-Packaging/installer: 0.3.1 native. Supplied game payload: unchanged 0.3 alpha, 404 files.
-
-| Check | Local result |
-|---|---|
-| Release x86 compilation, static CRT | Passed |
-| Engine assertions | 99 passed |
-| Original payload + manual ZIP assertions | 415 passed |
-| Native UI rendering | 30 states: RU/EN × five screens × 100/150/200% |
-| Repeated renderer completion | Five consecutive passes |
-| Embedded package verification | Exit code 0 |
-| Installer and three DLLs: ordinary PE imports | Windows system libraries; no mandatory VC++ Redistributable/.NET imports |
-| Local Defender scan of the local release candidate | Completed without detections |
-| Publisher signature | None |
-
-Engine tests cover install/update/remove, component changes, foreign-file conflicts, edited settings, pre-existing and new User.ini, legacy manifest migration, Unicode paths, unsupported EXEs, running-game rejection, cancellation before/during commit, hard links, manifest traversal, preparation/commit/removal errors and recovery after forcibly terminating a separate test process. Snapshots compare paths and file SHA-256 values. These are process-failure tests, not physical power-loss or disk-failure certification.
-
-Original-package tests copy the real payload into an isolated fixture. They do not load the DLLs or launch the game. Synthetic game hashes/process checks belong to the test harness, not public setup arguments. The manual ZIP manifest is recognized and removed by the same engine.
-
-The screenshots use the application's native rendering code; this is not a claim that every interactive Windows dialog has been automatically exercised.
-
-## Still required
-
-- Supported Steam (2023) EXE gameplay testing; the exact required hash is in the README.
-- Clean Windows 10/11 VM tests, including dynamic dependency paths and protected-directory permissions.
-- Real NVIDIA/AMD/Intel hardware coverage; source notes document RTX 5090 + i9-14900K only.
-- Signing and distribution review as applicable. A local clean scan does not guarantee SmartScreen reputation, acceptance by other antivirus engines or Nexus/Steam approval.
-
-GitHub Actions results are separate evidence from these local checks. Do not describe a pending CI run as passed.
+- Rebuilt x86 bridge from a private copy; only dinput8.dll differs from the 404-file 0.3.1 payload (403 files unchanged).
+- Release auto-enable/default-trace-off behavior: standalone test passed. [Physics] CameraFix=0 skips queueing; UI component selection renders CameraFix=1/0 through the settings template.
+- Exact release camera module: 30 original-writeback cases, 2048 CPU-state comparisons, two lifecycle chains and delayed-binding regression passed. Synthetic object bodies remain; no full native lifetime/concurrency proof.
+- Corpse fixes are unchanged from CAMTEST09: eight cleanup integration and 15 guarded-read tests previously passed. The long reviewed CAMTEST09 session had about 49 minutes with filter ON, no recorded exceptions, and balanced 96 acquired/released group marks. A rare ship-combat/jump camera jerk was confirmed by the user and is NOT fixed.
+- The packaged release variant enables the camera fix automatically and disables detailed diagnostics by default. This exact startup configuration passed standalone checks, but has not received a separate full in-game session. Current private game installation was not replaced during packaging.
+- Native installer: transaction-tests passed; 417 real-package checks passed, including defaults/component-off camera settings, full install, component update, early/middle/late rollback, clean removal and recognition/removal of a manual package in an isolated fixture. No real game launch.
+- Final installer --verify-package returned 0. UI renderer returned 0 for 5 screens, RU/EN, 100/150/200% scaling (30 images); representative screens visually reviewed.
+- Nexus package: 406 game files, per-file hashes and manifest checked; archive contains no .exe/.ps1/.cmd/.bat/.py or nested archives. Game EXE and saves are not included.
+- Unsigned alpha; only Steam (2023) EXE SHA256 bc11ad7924e1eca7363ee86aa3332c05386d0a05896c0b7370131daee9ab5150 is supported. Other hardware/builds, clean-machine deployment, all cinematics, all native Havok lifetimes and parallel step state are not fully validated.
+- No 40-corpse default, 2048-buffer expansion or complete Havok rewrite. CorpseLimit stays 20. Nothing uploaded to GitHub or Nexus by the assistant.

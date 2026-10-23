@@ -403,6 +403,6 @@ inline constexpr EmbeddedFile embeddedFiles[] = {
 {1399,"AC4-PhysX-D3D/src/k/UpdateParticlePositions.hlsl","d27e5bee528faf22321628ca1c733a0de4309df9284dbd8a1cd3b48c7a4eb05e"},
 {1400,"AC4-PhysX-D3D/src/k/UpdateParticles.hlsl","47ab3f513f24c79cc617e4409da2df2dab701715c5e1cac3cfdbd57b573dc8b4"},
 {1401,"AC4-PhysX-D3D/src/k/UpdateParticlesRestOffset.hlsl","319f3ec6184db12b3421f792b9c7954615bafd872f0aea2c5eb65984f6cb14a3"},
-{1402,"dinput8.dll","380f5a305e344dd391329accbc604fb3431951753210c51b5d2351be8a6ddb51"},
+{1402,"dinput8.dll","fb212f5bb10335df4830e3f6a410f0262c26a0d26fd97a3cea855544c7621f6d"},
 {1403,"nvcuda.dll","60053246d83745fb3d0626474df0425f5449b73b7e3e4cd97b38f412ed35d66c"},
 };

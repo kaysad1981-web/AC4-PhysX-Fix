@@ -65,6 +65,7 @@ int wmain(int argc, wchar_t **argv) {
             auto original = snapshot(root);
             Engine engine(real, context(), root);
             engine.install({});
+            require(text(read(root / L"AC4Fix/Settings.ini")).find("CameraFix=1") != std::string::npos, "camera fix not enabled by default");
             auto full = snapshot(root);
             require(full.size() == real.files.size() + 4, "real payload installation count mismatch");
             for (int position : {1, 203, 406}) {
@@ -84,6 +85,10 @@ int wmain(int argc, wchar_t **argv) {
             changed.fps = 141;
             engine.install(changed);
             require(!fs::exists(root / L"nvcuda.dll"), "real component switch failed");
+            Options physicsOnly;
+            physicsOnly.fixes = false;
+            engine.install(physicsOnly);
+            require(text(read(root / L"AC4Fix/Settings.ini")).find("CameraFix=0") != std::string::npos, "camera fix remains enabled with game fixes disabled");
             engine.remove(true);
             require(snapshot(root) == original, "real payload roundtrip mismatch");
             if (argc == 4) {

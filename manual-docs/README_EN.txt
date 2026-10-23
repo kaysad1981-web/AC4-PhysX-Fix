@@ -1,50 +1,41 @@
-AC4 PHYSX FIX 0.3 ALPHA — MANUAL INSTALLATION
-Native packaging release 0.3.1. This is an alternative to setup, not an additional component.
+AC4 PHYSX FIX / MODULAR PATCH 0.3.2 ALPHA — MANUAL INSTALLATION
+Free community patch. This ZIP is an alternative to setup, not an extra component.
 
-BEFORE INSTALLING
-Only the original Steam (2023) AC4BFSP.exe is supported, with SHA-256:
+SUPPORTED BUILD
+Steam (2023), AC4BFSP.exe SHA256:
 bc11ad7924e1eca7363ee86aa3332c05386d0a05896c0b7370131daee9ab5150
-This ZIP does not automatically check the game build, conflicts or permissions.
-If uncertain, use the native setup, which validates the executable, instead of copying files manually.
-Close the game. Back up your game folder or at least any files you intend to change.
+Manual copying does not automatically validate your game or detect conflicts.
 
-WHERE TO COPY
-1. Extract this ZIP to a separate location, such as Downloads/AC4Patch.
-2. Open GAME_FILES inside the extracted archive.
-3. Locate the installed game directory containing AC4BFSP.exe.
-4. STOP if dinput8.dll, nvcuda.dll, AC4Fix or AC4-PhysX-D3D already exists in the game directory.
-   It may belong to an old version or another mod. Do not overwrite it.
-   Use the original uninstaller / native setup to remove an existing installation of this patch first.
-5. Copy the CONTENTS of GAME_FILES into the game directory:
-   Game/AC4BFSP.exe  (existing game file; not included in the ZIP)
-   Game/dinput8.dll
-   Game/nvcuda.dll
-   Game/AC4Fix/Settings.ini
-   Game/AC4Fix/install-manifest.json
-   Game/AC4-PhysX-D3D/...
-   Wrong: Game/GAME_FILES/dinput8.dll.
-6. Start the game normally.
+INSTALL
+1. Close the game. Extract this archive outside the game folder.
+2. If dinput8.dll, nvcuda.dll, AC4Fix or AC4-PhysX-D3D already exists, stop:
+   it may belong to an earlier patch or another mod. Use its supported removal/update method.
+   Do not overwrite a foreign DLL. The native installer is preferred for validated updates.
+3. Copy the CONTENTS of GAME_FILES next to AC4BFSP.exe, not the GAME_FILES folder itself.
+4. Launch the game normally. The camera fix is ON automatically; F4 is not required.
 
-DEFAULTS
-Unlocked-FPS game fixes, PhysX via Direct3D 11 and performance-core selection on supported Intel CPUs.
-Automatic FPS cap = monitor refresh rate minus 3 (144 Hz -> 141 FPS). This is a ceiling, not guaranteed performance.
-Detail distance: as in game. Diagnostics: off.
-Personal changes belong in AC4Fix/User.ini, using the same sections and keys as Settings.ini.
+DEFAULTS AND OPTIONS
+CorpseLimit remains 20; no buffer expansion or Havok-rate change in this update.
+Detailed diagnostics are OFF. Automatic FPS ceiling remains monitor refresh minus 3.
+Personal overrides belong in AC4Fix/User.ini, using the same sections and keys.
+To disable the camera fix, add [Physics] and CameraFix=0 in User.ini, then restart the game.
+F10 retains the FPS/60-FPS switch. F4 is only a diagnostic toggle when Diagnostics=1.
+
+WHAT CHANGED
+Scoped suppression of confirmed retired CameraFX roll contributions, preserving live effects.
+Safer reads of corpse records and collision-group bookkeeping without rereading removed objects.
+The Direct3D 11 PhysX payload is retained; only dinput8.dll changed among the 404 payload files.
+
+KNOWN LIMITATIONS
+A rare camera jerk during ship combat/jumping is NOT fixed. The update does not eliminate all
+camera rotation or rewrite Havok. Some native object lifetime and concurrency risks remain.
+A long private CAMTEST09 game session was reviewed; this packaged auto-on/default-diagnostics-off
+variant passed standalone checks but has not yet received its own full in-game test.
+Only the stated EXE hash is supported. AMD/Intel validation remains incomplete.
 
 REMOVE
-Preferred: run AC4-PhysX-Fix-Setup.exe separately, choose the game directory and click Remove patch.
-The manifest in this ZIP allows native setup to recognize the manual installation.
-Close the game first. Changed settings/logs will be backed up outside the game.
-
-Without setup: remove only patch files listed in FILELIST_SHA256.txt relative to GAME_FILES.
-Ensure dinput8.dll / nvcuda.dll have not subsequently been replaced by another mod.
-Remove patch-generated runtime*.log / EffectPackage*.apb in AC4Fix and *.log / *.csv / crash-*.txt in
-AC4-PhysX-D3D if created after installation. Back up wanted logs and User.ini first.
-Delete directories only when empty; preserve unknown files and other mods.
-The original game EXE, game data and saves are not changed, so no original game files need restoring.
-
-LIMITATIONS
-Original unmodified game DLLs 0.3 alpha. Source notes document RTX 5090 + i9-14900K testing.
-AMD/Intel D3D11 compatibility is claimed but still requires hardware validation.
-ZIP packaging does not guarantee antivirus acceptance or Nexus quarantine clearance.
-Do not disable Windows protection to install this mod.
+Prefer the native installer: select the game directory and Remove patch. Keep install-manifest.json.
+Without setup, back up personal files and remove only the patch-owned files in FILELIST_SHA256.txt,
+relative to GAME_FILES. Preserve files replaced by other mods and unknown files. Never remove
+AC4BFSP.exe, game archives or saves. Back up User.ini and wanted logs first.
+Manual copying has no automatic rollback. No installer or script is included in this ZIP.

@@ -161,8 +161,8 @@ std::wstring title(int id) {
 }
 std::wstring subtitle(int id) {
     if (id == GAME)
-        return T(L"Ткань, паруса, физика тел, лифт, режимы экрана",
-                 L"Cloth, sails, body physics, elevator, display modes");
+        return T(L"Камера, ткань, паруса, тела, лифт, режимы экрана",
+                 L"Camera, cloth, sails, bodies, elevator, display modes");
     if (id == PHYS)
         return T(L"Дым и искры · NVIDIA / AMD / Intel*", L"Smoke and sparks · NVIDIA / AMD / Intel*");
     if (id == CPU)
@@ -324,11 +324,11 @@ void rebuild() {
         button(PHYS, 632, 279, 426, 70);
         button(CPU, 632, 354, 426, 70);
         tip(controls[GAME],
-            T(L"Исправления при высоком FPS:\n• Корректная скорость движения ткани, одежды, парусов и "
+            T(L"Исправления при высоком FPS:\n• Подавление зависшего крена камеры, включено автоматически.\n• Корректная скорость движения ткани, одежды, парусов и "
               L"флагов.\n• Рэгдоллы: устранение дёрганья и подбросов, столкновения тел.\n• Исправление "
               L"работы лифта при высоком FPS.\n• Разрешения и частоты обновления в меню экрана.\n• Точный "
               L"ограничитель FPS. F10: выбранный лимит / 60 FPS.",
-              L"High-FPS fixes:\n• Correct movement speed for cloth, coats, sails and flags.\n• Ragdolls: "
+              L"High-FPS fixes:\n• Scoped camera-roll fix, enabled automatically.\n• Correct movement speed for cloth, coats, sails and flags.\n• Ragdolls: "
               L"reduce twitching and launches; body collisions.\n• Elevator operation at high FPS.\n• "
               L"Display resolutions and refresh rates in the menu.\n• Precise frame limiter. F10: selected "
               L"limit / 60 FPS."));
@@ -565,7 +565,7 @@ void paint(HDC dc) {
                  L"Configure your patch for Assassin’s Creed IV: Black Flag. Choose components and install "
                  L"them in a few steps."),
                632, 352, 415, 120, 16);
-        textAt(g, L"0.3 alpha · Steam (2023)", 632, 520, 420, 30, 13, Color(255, 162, 190, 201));
+        textAt(g, L"0.3.2 alpha · Steam (2023)", 632, 520, 420, 30, 13, Color(255, 162, 190, 201));
     }
     if (step == 1) {
         textAt(g, T(L"Где установлена игра?", L"Where is your game installed?"), 632, 158, 425, 70, 29,
@@ -626,7 +626,7 @@ void paint(HDC dc) {
                    632, 538, 426, 77, 13);
         }
     }
-    textAt(g, T(L"0.3 alpha  ·  Установщик 0.3.1 native", L"0.3 alpha  ·  Installer 0.3.1 native"), 632, 685,
+    textAt(g, T(L"0.3.2 alpha  ·  Установщик 0.3.2 native", L"0.3.2 alpha  ·  Installer 0.3.2 native"), 632, 685,
            426, 20, 11, Color(255, 145, 171, 184));
     Graphics out(dc);
     out.DrawImage(&buffer, 0, 0);

@@ -24,7 +24,7 @@ $manualFiles=@(Get-ChildItem -LiteralPath $gameRoot -File -Recurse | Sort-Object
  [ordered]@{path=$_.FullName.Substring($gameRoot.Length+1).Replace('\','/');sha256=(Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant()}
 })
 $manualDirs=@(Get-ChildItem -LiteralPath $gameRoot -Directory -Recurse | ForEach-Object {$_.FullName.Substring($gameRoot.Length+1).Replace('\','/')})
-$manualManifest=[ordered]@{product='AC4-Modular-Patch';version='0.3.1-native-manual';patchVersion='0.3.0-alpha';manual=$true;root='';exeSha256='bc11ad7924e1eca7363ee86aa3332c05386d0a05896c0b7370131daee9ab5150';build='Steam (2023)';fixes=$true;cpu=$true;physx=$true;limit=0;preset=0;diag=$false;baseline=@();dirs=$manualDirs;files=$manualFiles}
+$manualManifest=[ordered]@{product='AC4-Modular-Patch';version='0.3.2-native-manual';patchVersion='0.3.2-alpha';manual=$true;root='';exeSha256='bc11ad7924e1eca7363ee86aa3332c05386d0a05896c0b7370131daee9ab5150';build='Steam (2023)';fixes=$true;cpu=$true;physx=$true;limit=0;preset=0;diag=$false;baseline=@();dirs=$manualDirs;files=$manualFiles}
 [IO.File]::WriteAllText((Join-Path $gameRoot 'AC4Fix\install-manifest.json'),($manualManifest|ConvertTo-Json -Depth 7),[Text.UTF8Encoding]::new($false))
 $list=@(Get-ChildItem -LiteralPath $gameRoot -File -Recurse | Sort-Object FullName | ForEach-Object {
  $name=$_.FullName.Substring($gameRoot.Length+1).Replace('\','/')

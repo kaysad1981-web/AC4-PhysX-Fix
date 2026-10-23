@@ -1,0 +1,10 @@
+LIBRARY "dinput8-camera-candidate"
+EXPORTS
+DirectInput8Create=_ProxyCreate@20
+DllCanUnloadNow=_ProxyCanUnload@0 PRIVATE
+DllGetClassObject=_ProxyGetClass@12 PRIVATE
+DllRegisterServer=_ProxyRegister@0 PRIVATE
+DllUnregisterServer=_ProxyUnregister@0 PRIVATE
+GetdfDIJoystick=_ProxyDataFormat@0
+
+CameraCandidateStatus

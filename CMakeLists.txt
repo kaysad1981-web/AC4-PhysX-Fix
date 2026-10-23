@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
-project(AC4Native VERSION 0.3.1 LANGUAGES CXX RC)
+project(AC4Native VERSION 0.3.2 LANGUAGES CXX RC)
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/json.hpp")
   file(DOWNLOAD
     "https://raw.githubusercontent.com/nlohmann/json/v3.12.0/single_include/nlohmann/json.hpp"

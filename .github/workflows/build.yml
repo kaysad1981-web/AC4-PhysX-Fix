@@ -46,10 +46,10 @@ jobs:
       - name: Package release files
         run: |
           Copy-Item -LiteralPath build/Release/AC4-PhysX-Fix-Setup.exe -Destination dist/AC4-PhysX-Fix-Setup.exe
-          Compress-Archive -Path dist/manual/* -DestinationPath dist/AC4-PhysX-Fix-0.3.1-Nexus-Manual.zip
-          git archive --format=zip --output=dist/AC4-PhysX-Fix-0.3.1-Installer-Source.zip HEAD
+          Compress-Archive -Path dist/manual/* -DestinationPath dist/AC4-PhysX-Fix-0.3.2-Nexus-Manual.zip
+          git archive --format=zip --output=dist/AC4-PhysX-Fix-0.3.2-Source.zip HEAD
           if ($LASTEXITCODE -ne 0) { throw 'Source archive failed' }
-          $names = @('AC4-PhysX-Fix-Setup.exe','AC4-PhysX-Fix-0.3.1-Nexus-Manual.zip','AC4-PhysX-Fix-0.3.1-Installer-Source.zip')
+          $names = @('AC4-PhysX-Fix-Setup.exe','AC4-PhysX-Fix-0.3.2-Nexus-Manual.zip','AC4-PhysX-Fix-0.3.2-Source.zip')
           $lines = $names | ForEach-Object { '{0}  {1}' -f (Get-FileHash -LiteralPath "dist/$_" -Algorithm SHA256).Hash.ToLowerInvariant(), $_ }
           [IO.File]::WriteAllLines("$PWD/dist/SHA256SUMS.txt", $lines, [Text.UTF8Encoding]::new($false))
           Copy-Item -LiteralPath docs/RELEASE-NOTES.md -Destination dist/RELEASE-NOTES.md
@@ -58,8 +58,8 @@ jobs:
           name: native-release-files
           path: |
             dist/AC4-PhysX-Fix-Setup.exe
-            dist/AC4-PhysX-Fix-0.3.1-Nexus-Manual.zip
-            dist/AC4-PhysX-Fix-0.3.1-Installer-Source.zip
+            dist/AC4-PhysX-Fix-0.3.2-Nexus-Manual.zip
+            dist/AC4-PhysX-Fix-0.3.2-Source.zip
             dist/SHA256SUMS.txt
             dist/RELEASE-NOTES.md
           if-no-files-found: error
@@ -83,15 +83,15 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          tag='v0.3.1-native'
+          tag='v0.3.2-alpha'
           if gh release view "$tag" >/dev/null 2>&1; then
             echo 'Release already exists; preserving its original files.'
             exit 0
           fi
           gh release create "$tag" --target "$RELEASE_COMMIT" --prerelease \
-            --title 'AC4 PhysX Fix 0.3.1 native — alpha' \
+            --title 'AC4 PhysX Fix 0.3.2 — camera fix (alpha)' \
             --notes-file dist/RELEASE-NOTES.md \
             dist/AC4-PhysX-Fix-Setup.exe \
-            dist/AC4-PhysX-Fix-0.3.1-Nexus-Manual.zip \
-            dist/AC4-PhysX-Fix-0.3.1-Installer-Source.zip \
+            dist/AC4-PhysX-Fix-0.3.2-Nexus-Manual.zip \
+            dist/AC4-PhysX-Fix-0.3.2-Source.zip \
             dist/SHA256SUMS.txt

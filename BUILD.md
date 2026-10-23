@@ -2,7 +2,7 @@
 
 Windows, Visual Studio 2022/2026 C++ desktop tools, a CMake version supporting that generator and a Windows 10 SDK are required **only on the build machine**. The resulting installer does not need these tools. GitHub Actions detects the installed Visual Studio C++ version on its Windows 2025 image.
 
-The repository includes generated resource tables, the original verified 404-file payload in `distribution/payload.zip`, the settings template and the supplied background/icon. CMake extracts the payload and verifies all hashes. It downloads nlohmann/json 3.12.0 only if absent and verifies its SHA-256: `aaf127c04cb31c406e5b04a63f1ae89369fccde6d8fa7cdda1ed4f32dfc5de63`. This build-time download does not occur on a player's machine.
+The repository includes generated resource tables, the verified 404-file payload with updated dinput8.dll in `distribution/payload.zip`, the settings template and the supplied background/icon. CMake extracts the payload and verifies all hashes. It downloads nlohmann/json 3.12.0 only if absent and verifies its SHA-256: `aaf127c04cb31c406e5b04a63f1ae89369fccde6d8fa7cdda1ed4f32dfc5de63`. This build-time download does not occur on a player's machine.
 
 From a terminal in this source folder:
 
@@ -21,7 +21,7 @@ To generate the Nexus package:
 ```powershell
 ./package-manual.ps1 -Destination "$PWD/dist/manual"
 ./build/Release/engine-tests.exe --package "$PWD" "$PWD/dist/manual/GAME_FILES"
-Compress-Archive -Path dist/manual/* -DestinationPath dist/AC4-PhysX-Fix-0.3.1-Nexus-Manual.zip
+Compress-Archive -Path dist/manual/* -DestinationPath dist/AC4-PhysX-Fix-0.3.2-Nexus-Manual.zip
 ```
 
 Release assets are separate from Git history. The workflow publishes a prerelease only after successful tests and a main-branch push whose commit message contains `[release]`. Existing release assets are preserved.
@@ -37,3 +37,7 @@ The installer uses ordinary PE RCDATA resources, no executable packer, no PowerS
 Only the installer code is newly authored here. The original supplied game DLLs were not rebuilt and their provenance/licensing is not changed by this project. Asset ownership/licensing and third-party redistribution rights must be resolved by the project owner before public publication.
 
 A code-signing certificate is not bundled; no self-signed certificate is silently installed. Sign the final EXE using a publisher identity under the project owner's control if available, then regenerate release checksums. Signing does not guarantee store approval or eliminate all warnings.
+
+## Rebuilt bridge
+
+`bridge/AC4-Camera-Candidate10-20261022/build-private-candidate.ps1` builds the release fork. Historical directory names preserve include paths. The release enables CameraFix automatically and gates detailed tracing behind Diagnostics. After rebuilding, update `distribution/payload.zip`, `payload-hashes.json` and generated resource hashes before packaging. The installer embeds a prebuilt bridge; CI currently builds/tests the installer, not the bridge ABI stands. See docs/VALIDATION.md for the local bridge checks.
