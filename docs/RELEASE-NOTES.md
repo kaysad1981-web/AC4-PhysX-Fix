@@ -1,4 +1,4 @@
-# AC4 PhysX Fix 0.3.2 — camera fix (alpha)
+# Assassin's Creed IV: Black Flag — PhysX & High FPS Fix 0.3.2 alpha
 
 ## Русский
 

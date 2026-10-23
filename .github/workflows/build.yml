@@ -85,11 +85,12 @@ jobs:
           set -euo pipefail
           tag='v0.3.2-alpha'
           if gh release view "$tag" >/dev/null 2>&1; then
-            echo 'Release already exists; preserving its original files.'
+            echo 'Release already exists; updating its title and preserving its original files.'
+            gh release edit "$tag" --title "Assassin's Creed IV: Black Flag — PhysX & High FPS Fix 0.3.2 alpha"
             exit 0
           fi
           gh release create "$tag" --target "$RELEASE_COMMIT" --prerelease \
-            --title 'AC4 PhysX Fix 0.3.2 — camera fix (alpha)' \
+            --title "Assassin's Creed IV: Black Flag — PhysX & High FPS Fix 0.3.2 alpha" \
             --notes-file dist/RELEASE-NOTES.md \
             dist/AC4-PhysX-Fix-Setup.exe \
             dist/AC4-PhysX-Fix-0.3.2-Nexus-Manual.zip \
